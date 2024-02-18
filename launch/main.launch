@@ -1,0 +1,25 @@
+<launch>
+    <node pkg="lqr_track" type="LQR_node_world" name="LQR_node_world" output="screen">
+
+        <!--Basic vehicle information--><!--kesi is the Vehicle front wheel deflection angle-->
+        <param name="L" value="0.24"/><!--Vehicle wheelbase-->
+        <param name="V_DESIRED" value="0.5"/>
+        <param name="v_max" value="1.0"/>
+
+        <!--controller information-->
+        <param name="freq" value="20"/><!--control freq-->
+        <param name="slow_LEVE1_DISTANCE" value="4.0"/><!--First stage deceleration distance-->
+        <param name="slow_LEVE2_DISTANCE" value="1.0"/><!--Secondary deceleration distance-->
+        <param name="goal_tolerance_DISTANCE" value="0.05"/><!--Tracking stop distance-->
+        <param name="slow_LEVE1_V" value="0.5"/>
+        <param name="slow_LEVE2_V" value="0.45"/>
+        <param name="limit_v_and_kesi" value="true"/><!--limit v and w-->
+        <param name="is_simulate" value="true"/><!--update simulate pose-->
+        <rosparam param="Q_set">[20.0,100.0,1.0]</rosparam><!--State weight matrix Q = diag{Q1,Q2,Q3},please set Q<R [20.0,100.0,1.0]  you may use [1.0,1.0,1.0] -->
+        <rosparam param="R_set">[4.0,4.0]</rosparam><!--Control input weight matrix R = diag{R1,R2},please set Q<R-->
+        <remap from="path" to="/path_follow/curve" />
+    </node>
+
+    <!--rviz-->
+    <node name="lqr_track_rviz" pkg="rviz" type="rviz" required="true" args="-d $(find lqr_track)/rviz/track.rviz"/>
+</launch>
